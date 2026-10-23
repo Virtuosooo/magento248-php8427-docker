@@ -15,7 +15,6 @@ jobs:
           cat build-source/magento-source.part-* > magento-2.4.8-source.tar.gz
           sha256sum --check source.sha256
           tar -xzf magento-2.4.8-source.tar.gz
-      - uses: docker/setup-qemu-action@v4
       - uses: docker/setup-buildx-action@v4
       - uses: docker/login-action@v4
         with:
@@ -26,9 +25,9 @@ jobs:
         with:
           context: .
           target: app
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
-          tags: ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27
+          tags: ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27-amd64
           labels: org.opencontainers.image.source=https://github.com/Virtuosooo/magento248-php8427-docker
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -37,13 +36,13 @@ jobs:
         with:
           context: .
           file: Mailcatcher.Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
-          tags: ghcr.io/virtuosooo/magento248-mailcatcher:v0.10.0
-      - name: Verify published PHP and Magento versions on both architectures
+          tags: ghcr.io/virtuosooo/magento248-mailcatcher:v0.10.0-amd64
+      - name: Verify published PHP and Magento versions on amd64
         run: |
-          for platform in linux/amd64 linux/arm64; do
-            image=ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27
+          for platform in linux/amd64; do
+            image=ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27-amd64
             docker pull --platform "$platform" "$image"
             docker run --rm --platform "$platform" --entrypoint php "$image" -r 'if(PHP_VERSION !== "8.4.27"){exit(1);} echo PHP_VERSION, PHP_EOL;'
             docker run --rm --platform "$platform" --entrypoint php "$image" /opt/magento/bin/magento --version | grep -Fx 'Magento CLI 2.4.8'

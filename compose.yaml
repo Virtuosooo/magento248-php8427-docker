@@ -1,7 +1,7 @@
 name: recon-magento248-php8427
 services:
   app:
-    image: ${MAGENTO_IMAGE:-ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27}
+    image: ${MAGENTO_IMAGE:-ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27-amd64}
     restart: "no"
     ports:
       - "127.0.0.1:8088:80"
@@ -55,7 +55,7 @@ services:
       timeout: 5s
       retries: 60
   mailcatcher:
-    image: ${MAILCATCHER_IMAGE:-ghcr.io/virtuosooo/magento248-mailcatcher:v0.10.0}
+    image: ${MAILCATCHER_IMAGE:-ghcr.io/virtuosooo/magento248-mailcatcher:v0.10.0-amd64}
     restart: "no"
     ports:
       - "127.0.0.1:1088:1080"
