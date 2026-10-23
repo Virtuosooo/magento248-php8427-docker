@@ -6,13 +6,12 @@
 ## Windows / WSL2 部署
 
 启用 Docker Desktop 的 WSL2 integration，在 Ubuntu 终端执行。建议 Docker 分配至少 6 GB 内存。
-私有仓库和 GHCR 镜像需要自己的 GitHub 访问权限；`docker login ghcr.io` 的密码使用自己的只读 packages token，勿把 token 发给他人。
+仓库及两个 GHCR 镜像已公开，无需 GitHub 登录或 token 即可下载。
 
 ```bash
 git clone https://github.com/Virtuosooo/magento248-php8427-docker.git
 cd magento248-php8427-docker
 bash setup-env.sh
-docker login ghcr.io -u YOUR_GITHUB_USERNAME
 docker compose pull
 docker compose up -d --wait
 docker compose exec --user www-data app php /usr/local/bin/install-magento.php
