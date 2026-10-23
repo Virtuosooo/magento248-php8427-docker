@@ -30,7 +30,7 @@ docker compose exec --user www-data app php bin/magento cache:flush
 
 ## 镜像构建
 
-构建用 Magento 程序与锁定依赖位于私有 release `source-2.4.8` 的 `magento-2.4.8-source.tar.gz`，SHA-256 由 `source.sha256` 核对。
+构建用 Magento 程序与锁定依赖归档位于 `build-source/`，以分段文件保存，避免单文件超过 GitHub 大小限制。构建时还原 `magento-2.4.8-source.tar.gz`，SHA-256 由 `source.sha256` 核对。
 该归档不含下载认证、安装后的配置或数据库。GHCR 由 GitHub Actions 使用临时 GITHUB_TOKEN 发布，不需要额外保存发布用个人 token。
-运行 `Publish image` workflow，或发布 source release，构建并发布 linux/amd64、linux/arm64 镜像。
+手动运行 `Publish image` workflow，构建并发布 linux/amd64、linux/arm64 镜像。
 构建结果与业务兼容性分开：干净商城可运行不代表 RECON 插件或支付流程通过。

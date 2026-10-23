@@ -1,8 +1,6 @@
 name: Publish image
 on:
   workflow_dispatch:
-  release:
-    types: [published]
 permissions:
   contents: read
   packages: write
@@ -12,11 +10,9 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
-      - name: Download locked source bundle
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Restore locked source bundle
         run: |
-          gh release download source-2.4.8 --pattern magento-2.4.8-source.tar.gz
+          cat build-source/magento-source.part-* > magento-2.4.8-source.tar.gz
           sha256sum --check source.sha256
           tar -xzf magento-2.4.8-source.tar.gz
       - uses: docker/setup-qemu-action@v4
