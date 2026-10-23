@@ -2,6 +2,7 @@
 !Dockerfile
 !composer.phar
 !php.ini
+!msmtprc
 !apache.conf
 !entrypoint.sh
 !install.php

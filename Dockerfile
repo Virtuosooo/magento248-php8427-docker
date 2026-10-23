@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/* \
  && a2enmod rewrite ssl
 RUN docker-php-ext-install -j2 ftp
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends msmtp && rm -rf /var/lib/apt/lists/*
+COPY msmtprc /etc/msmtprc
 COPY composer.phar /usr/local/bin/composer
 RUN chmod +x /usr/local/bin/composer
 COPY php.ini /usr/local/etc/php/conf.d/zz-magento.ini

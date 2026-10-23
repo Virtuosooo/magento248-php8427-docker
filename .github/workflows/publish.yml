@@ -32,6 +32,14 @@ jobs:
           labels: org.opencontainers.image.source=https://github.com/Virtuosooo/magento248-php8427-docker
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Mirror default Mailcatcher image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Mailcatcher.Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/virtuosooo/magento248-mailcatcher:v0.10.0
       - name: Verify published PHP and Magento versions on both architectures
         run: |
           for platform in linux/amd64 linux/arm64; do

@@ -54,6 +54,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 60
+  mailcatcher:
+    image: ${MAILCATCHER_IMAGE:-ghcr.io/virtuosooo/magento248-mailcatcher:v0.10.0}
+    restart: "no"
+    ports:
+      - "127.0.0.1:1088:1080"
 volumes:
   appdata:
   dbdata:

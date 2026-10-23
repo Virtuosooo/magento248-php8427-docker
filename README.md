@@ -1,7 +1,7 @@
 # Magento 2.4.8 + PHP 8.4.27
 
 独立本机测试商城：Magento Open Source **2.4.8**、PHP **8.4.27**、MariaDB **11.4**、OpenSearch **2.19.0**。
-不含 RECON 插件、示例商品、商户凭据或已安装的数据库。不依赖 Mailcatcher。
+不含 RECON 插件、示例商品、商户凭据或已安装的数据库。邮件沿用 Docker Magento 的 msmtp + Mailcatcher 本机测试方式，Mailcatcher 使用本仓库关联的 GHCR 镜像。
 
 ## Windows / WSL2 部署
 
@@ -23,7 +23,7 @@ docker compose exec --user www-data app php bin/magento cache:flush
 
 商城：https://localhost:8448/；后台：https://localhost:8448/admin/。
 用户 `recon_admin`，管理员密码见本机 `.env` 的 `ADMIN_PASSWORD`。每次部署独立生成凭据和自签名证书。
-后台双重验证保持 Magento 原版默认设置，首次登录按页面提示完成配置。
+后台双重验证保持 Magento 原版默认设置，首次登录按页面提示完成配置。初始化邮件在 http://localhost:1088/ 查看；只捕获本机测试邮件，不向外部发送。
 
 安装命令拒绝对已安装数据库重复执行。
 
