@@ -23,11 +23,7 @@ docker compose exec --user www-data app php bin/magento cache:flush
 
 商城：https://localhost:8448/；后台：https://localhost:8448/admin/。
 用户 `recon_admin`，管理员密码见本机 `.env` 的 `ADMIN_PASSWORD`。每次部署独立生成凭据和自签名证书。
-每次部署独立初始化 Google 双重验证，不需要邮件服务。首次登录前，执行下面命令查看本机 2FA 密钥，手动添加到自己的验证器 App（账号：recon_admin，基于时间），随后输入 App 的验证码登录。不要分享该密钥。
-
-```bash
-docker compose exec --user www-data app cat var/admin-tfa-secret.txt
-```
+后台双重验证保持 Magento 原版默认设置，首次登录按页面提示完成配置。
 
 安装命令拒绝对已安装数据库重复执行。
 

@@ -16,22 +16,4 @@ $args = [PHP_BINARY, 'bin/magento', 'setup:install',
  '--search-engine=opensearch', '--opensearch-host=opensearch',
  '--opensearch-port=9200', '--session-save=files', '--no-interaction'];
 $process = proc_open($args, [0 => STDIN, 1 => STDOUT, 2 => STDERR], $pipes, '/var/www/html');
-$status = is_resource($process) ? proc_close($process) : 1;
-if ($status !== 0) { exit($status); }
-// 本机无邮件服务：每次部署独立初始化 Google 2FA，保留后台双重验证。
-$alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-$secret = '';
-for ($i = 0; $i < 32; $i++) { $secret .= $alphabet[random_int(0, 31)]; }
-file_put_contents('/var/www/html/var/admin-tfa-secret.txt', $secret);
-chmod('/var/www/html/var/admin-tfa-secret.txt', 0600);
-foreach ([
- ['config:set', 'twofactorauth/general/force_providers', 'google'],
- ['security:tfa:google:set-secret', 'recon_admin', $secret],
-] as $command) {
-    $process = proc_open(array_merge([PHP_BINARY, 'bin/magento'], $command),
-        [0 => STDIN, 1 => STDOUT, 2 => STDERR], $pipes, '/var/www/html');
-    $status = is_resource($process) ? proc_close($process) : 1;
-    if ($status !== 0) { exit($status); }
-}
-echo "Independent Google 2FA secret saved in var/admin-tfa-secret.txt.\n";
-exit(0);
+exit(is_resource($process) ? proc_close($process) : 1);
