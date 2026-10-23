@@ -36,3 +36,8 @@ docker compose exec --user www-data app php bin/magento cache:flush
 该归档不含下载认证、安装后的配置或数据库。GHCR 由 GitHub Actions 使用临时 GITHUB_TOKEN 发布，不需要额外保存发布用个人 token。
 手动运行 `Publish image` workflow，构建并发布 linux/amd64、linux/arm64 镜像。
 构建结果与业务兼容性分开：干净商城可运行不代表 RECON 插件或支付流程通过。
+
+## 本轮验证（2026-10-23）
+
+本机 ARM64：PHP 8.4.27、Magento 2.4.8；安装、DI 编译、静态资源部署、索引均成功。HTTPS 首页、样式资源、后台登录页正常；账号密码认证进入原版 2FA 配置流程，初始化邮件已由 Mailcatcher 捕获。未预配置验证器密钥。
+尚未安装 RECON 插件，未测试支付。镜像的 amd64/arm64 版本和平台要求另由发布工作流校验。
