@@ -1,0 +1,61 @@
+name: recon-magento248-php8427
+services:
+  app:
+    image: ${MAGENTO_IMAGE:-ghcr.io/virtuosooo/magento248-php8427:2.4.8-php8.4.27}
+    restart: "no"
+    ports:
+      - "127.0.0.1:8088:80"
+      - "127.0.0.1:8448:443"
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD:?}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?}
+    volumes:
+      - appdata:/var/www/html
+      - tlsdata:/etc/apache2/local-tls
+    depends_on:
+      db:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+  db:
+    image: mariadb:11.4
+    restart: "no"
+    environment:
+      MARIADB_DATABASE: magento
+      MARIADB_USER: magento
+      MARIADB_PASSWORD: ${DB_PASSWORD:?}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?}
+    command: --max_allowed_packet=64M --log_bin_trust_function_creators=1
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  opensearch:
+    image: opensearchproject/opensearch:2.19.0
+    restart: "no"
+    environment:
+      discovery.type: single-node
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      DISABLE_SECURITY_PLUGIN: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+      bootstrap.memory_lock: "true"
+      cluster.routing.allocation.disk.threshold_enabled: "false"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - searchdata:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200/_cluster/health >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 60
+volumes:
+  appdata:
+  dbdata:
+  searchdata:
+  tlsdata:

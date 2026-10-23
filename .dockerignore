@@ -1,0 +1,12 @@
+**
+!Dockerfile
+!composer.phar
+!php.ini
+!apache.conf
+!entrypoint.sh
+!install.php
+!src/
+!src/**
+src/auth.json
+src/app/etc/env.php
+src/.git/**

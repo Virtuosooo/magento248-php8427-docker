@@ -1,0 +1,7 @@
+.env
+.secrets/
+src/
+composer.phar
+*.tar.gz
+logs/
+verification.json
